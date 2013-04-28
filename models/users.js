@@ -28,3 +28,8 @@ Users.prototype.findOrCreate = function (username, callback) {
     });
   });
 };
+
+Users.prototype.middleware = function (req, res, next) {
+  req.users = this;
+  next();
+};
