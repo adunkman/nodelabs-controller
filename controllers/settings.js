@@ -4,7 +4,6 @@ var user = process.env.AUTH_USER || "user";
 var password = process.env.AUTH_PASSWORD || "password";
 
 settings.use(express.basicAuth(user, password));
-settings.use(express.bodyParser());
 
 settings.get("/settings", function (req, res) {
   var render = function (settings) {
