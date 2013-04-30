@@ -1,0 +1,25 @@
+doctype 5
+html
+  head
+    title Unlock a user - Node Labs
+    != css("unlock")
+    != css("http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Sans+Mono")
+
+    != js("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+    != js("unlock")
+  body
+    #header: img(src="http://www.nodelabs.org/css/img/logotype_light.png")
+
+    form(method="GET")
+      select(name="username")
+        each user in users
+          option(value=user.username)= user.username
+
+      select(name="lab")
+        - var labs = ["repl.html", "shell.html", "http.html"];
+        each lab in labs
+          option(value=lab)= lab
+
+      button(type="submit") Unlock
+
+    #status

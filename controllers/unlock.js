@@ -1,5 +1,12 @@
 var unlock = module.exports = require("express")();
 
+unlock.get("/unlock", function (req, res, next) {
+  req.users.findAll(function (err, users) {
+    if (err) return next(err);
+    res.render("unlock", { users: users });
+  });
+});
+
 unlock.get("/:username/:lab", function (req, res, next) {
   var username = req.params.username;
   var lab = "/" + req.params.lab;

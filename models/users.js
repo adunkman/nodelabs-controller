@@ -40,6 +40,13 @@ Users.prototype.save = function (user, callback) {
   }.bind(this));
 };
 
+Users.prototype.findAll = function (callback) {
+  this.db.collection("users", function (err, collection) {
+    if (err) return callback(err);
+    collection.find({}, { sort: { username: 1 } }).toArray(callback);
+  });
+};
+
 Users.prototype.middleware = function (req, res, next) {
   req.users = this;
   next();
