@@ -1,9 +1,10 @@
 var unlock = module.exports = require("express")();
+var labs = require("../labs");
 
 unlock.get("/unlock", function (req, res, next) {
   req.users.findAll(function (err, users) {
     if (err) return next(err);
-    res.render("unlock", { users: users });
+    res.render("unlock", { users: users, labs: labs });
   });
 });
 

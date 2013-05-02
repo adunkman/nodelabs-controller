@@ -18,6 +18,7 @@ app.use(require("connect-assets")());
 
 mongohq.once("connected", function (db) {
   var userToSocket = {};
+  var dashboards = [];
   var settings = new (require("./models/settings"))(db);
   var users = new (require("./models/users"))(db);
 
@@ -27,12 +28,24 @@ mongohq.once("connected", function (db) {
   app.use(require("./controllers/unlock"));
   app.use(require("./controllers/settings"));
 
+  var updateDashboards = function () {
+    users.findAll(function (err, userList) {
+      if (err) throw err;
+      
+      for (var i = 0; i < dashboards.length; i++) {
+        var socketId = dashboards[i];
+        io.sockets.sockets[socketId].emit("users", userList);
+      };
+    });
+  };
+
   settings.on("updated", function () {
     io.sockets.emit("settings", settings.properties);
   });
 
   users.on("userUpdated", function (user) {
     var usersSockets = userToSocket[user.username];
+    updateDashboards();
     
     if (!usersSockets) return;
 
@@ -54,8 +67,13 @@ mongohq.once("connected", function (db) {
         userToSocket[username] = userToSocket[username] || [];
         userToSocket[username].push(socket.id);
 
+        updateDashboards();
         socket.emit("user", user);
       });
+    });
+
+    socket.on("dashboard", function () {
+      dashboards.push(socket.id);
     });
 
     socket.on("disconnect", function () {
@@ -66,6 +84,13 @@ mongohq.once("connected", function (db) {
             userToSocket[username].splice(i, 1);
           }
         };
+      }
+
+      for (var i = 0; i < dashboards.length; i++) {
+        var socketId = dashboards[i];
+        if (socket.id == socketId) {
+          dashboards.splice(i, 1);
+        }
       }
     });
   });

@@ -1,0 +1,25 @@
+doctype 5
+html
+  head
+    title Node Labs
+    != css("dashboard")
+    != css("http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Sans+Mono")
+
+    script(src="/socket.io/socket.io.js")
+    != js("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+    != js("dashboard")
+
+    script
+      window.labs = !{JSON.stringify(labs)};
+      window.template = !{template.toString()};
+  body
+    table
+      thead
+        tr
+          th
+          each name, index in labs
+            th Lab #{index + 1}
+
+      tbody
+        each user in users
+          != template(user, labs)
