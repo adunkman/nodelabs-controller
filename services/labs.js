@@ -1,7 +1,8 @@
 var request = require("request");
 var labsHost = process.env.LABS_HOST || "localhost";
 var labsPort = process.env.LABS_PORT || 4000;
-var labsUrl = "http://" + labsHost + ":" + labsPort + "/workshop/labs.json";
+var labsUrl = "http://" + labsHost +
+  (labsPort == 80 ? "" : ":" + labsPort) + "/workshop/labs.json";
 
 var labs = module.exports = function (req, res, next) {
   req.labs = { getLabList: getLabList };
