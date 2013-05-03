@@ -24,6 +24,7 @@ mongohq.once("connected", function (db) {
 
   app.use(settings.middleware.bind(settings));
   app.use(users.middleware.bind(users));
+  app.use(require("./services/labs"));
   app.use(require("./controllers/dashboard"));
   app.use(require("./controllers/unlock"));
   app.use(require("./controllers/settings"));

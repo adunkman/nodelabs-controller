@@ -1,15 +1,22 @@
 var express = require("express");
+var async = require("async");
 var unlock = module.exports = express();
-var labs = require("../labs");
 var user = process.env.AUTH_USER || "user";
 var password = process.env.AUTH_PASSWORD || "password";
 
 var auth = express.basicAuth(user, password);
 
 unlock.get("/admin/unlock", auth, function (req, res, next) {
-  req.users.findAll(function (err, users) {
+  async.parallel({
+    labs: req.labs.getLabList,
+    users: req.users.findAll.bind(req.users)
+  }, function (err, results) {
     if (err) return next(err);
-    res.render("unlock", { users: users, labs: labs });
+
+    res.render("unlock", {
+      users: results.users,
+      labs: results.labs
+    });
   });
 });
 
