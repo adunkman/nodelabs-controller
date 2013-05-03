@@ -29,6 +29,11 @@ mongohq.once("connected", function (db) {
   app.use(require("./controllers/unlock"));
   app.use(require("./controllers/settings"));
 
+  app.use(function (err, req, res, next) {
+    console.error(err);
+    next(err);
+  });
+
   var updateDashboards = function () {
     users.findAll(function (err, userList) {
       if (err) throw err;
