@@ -22,6 +22,6 @@ settings.post("/admin/:key", auth, function (req, res) {
   if (value === "true") value = true;
 
   req.settings.set(key, value, function () {
-    res.redirect("/settings");
+    res.redirect("/admin");
   });
 });
