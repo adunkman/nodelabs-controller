@@ -13,7 +13,7 @@ unlock.get("/admin/unlock", auth, function (req, res, next) {
   });
 });
 
-unlock.get("/:username/:lab", function (req, res, next) {
+unlock.get("/unlock/:username/:lab", function (req, res, next) {
   var username = req.params.username;
   var lab = "/" + req.params.lab;
   var now = new Date();
