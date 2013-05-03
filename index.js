@@ -14,7 +14,7 @@ var mongohq = new (require("./services/mongohq"))();
 
 app.set("view engine", "jade");
 app.use(express.bodyParser());
-app.use(require("connect-assets")());
+app.use("/admin", require("connect-assets")({ servePath: "admin" }));
 
 mongohq.once("connected", function (db) {
   var userToSocket = {};
@@ -31,7 +31,7 @@ mongohq.once("connected", function (db) {
   var updateDashboards = function () {
     users.findAll(function (err, userList) {
       if (err) throw err;
-      
+
       for (var i = 0; i < dashboards.length; i++) {
         var socketId = dashboards[i];
         io.sockets.sockets[socketId].emit("users", userList);
@@ -46,7 +46,7 @@ mongohq.once("connected", function (db) {
   users.on("userUpdated", function (user) {
     var usersSockets = userToSocket[user.username];
     updateDashboards();
-    
+
     if (!usersSockets) return;
 
     for (var i = 0; i < usersSockets.length; i++) {

@@ -6,15 +6,15 @@ html
     != css("http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Sans+Mono")
 
   body
-    #header: img(src="http://www.nodelabs.org/css/img/logotype_light.png")
+    #header: img(src="/css/img/logotype_light.png")
 
     if settings.allowFirstLab
       p First lab is enabled. Students can begin working.
-        form(method="post", action="/settings/allowFirstLab")
+        form(method="post", action="/admin/allowFirstLab")
           input(type="hidden", name="value", value="false")
           button(type="submit") Disable first lab
     else
       p First lab is disabled, students are prompted to wait for further instructions.
-        form(method="post", action="/settings/allowFirstLab")
+        form(method="post", action="/admin/allowFirstLab")
           input(type="hidden", name="value", value="true")
           button(type="submit") Enable first lab
