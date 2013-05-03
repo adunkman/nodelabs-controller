@@ -1,7 +1,12 @@
-var unlock = module.exports = require("express")();
+var express = require("express");
+var unlock = module.exports = express();
 var labs = require("../labs");
+var user = process.env.AUTH_USER || "user";
+var password = process.env.AUTH_PASSWORD || "password";
 
-unlock.get("/unlock", function (req, res, next) {
+var auth = express.basicAuth(user, password);
+
+unlock.get("/admin/unlock", auth, function (req, res, next) {
   req.users.findAll(function (err, users) {
     if (err) return next(err);
     res.render("unlock", { users: users, labs: labs });
@@ -21,7 +26,7 @@ unlock.get("/:username/:lab", function (req, res, next) {
 
     req.users.save(user, function (err) {
       if (err) return next(err);
-      
+
       res.send({ message: "Lab " + lab + " completed for user " + username });
     });
   });

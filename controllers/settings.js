@@ -3,18 +3,18 @@ var settings = module.exports = express();
 var user = process.env.AUTH_USER || "user";
 var password = process.env.AUTH_PASSWORD || "password";
 
-settings.use(express.basicAuth(user, password));
+var auth = express.basicAuth(user, password);
 
-settings.get("/settings", function (req, res) {
+settings.get("/admin", auth, function (req, res) {
   var render = function (settings) {
     res.render("settings", { settings: req.settings.properties });
   };
-  
+
   if (req.settings.initialized) render();
   else req.settings.once("updated", render);
 });
 
-settings.post("/settings/:key", function (req, res) {
+settings.post("/admin/:key", auth, function (req, res) {
   var key = req.params.key;
   var value = req.body.value;
 
