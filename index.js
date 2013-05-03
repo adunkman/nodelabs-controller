@@ -14,7 +14,7 @@ var mongohq = new (require("./services/mongohq"))();
 
 app.set("view engine", "jade");
 app.use(express.bodyParser());
-app.use("/admin", require("connect-assets")({ servePath: "admin" }));
+app.use("/admin", require("connect-assets")({ servePath: "/admin" }));
 
 mongohq.once("connected", function (db) {
   var userToSocket = {};
